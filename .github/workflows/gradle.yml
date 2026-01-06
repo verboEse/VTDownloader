@@ -42,3 +42,24 @@ jobs:
         with:
           name: Built mod on JDK ${{ matrix.java }}
           path: build/libs/*.jar
+
+      - name: Determine release info
+        id: release_info
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          VT_VERSION=$(grep -E '^vt_version' gradle.properties | cut -d'=' -f2 | tr -d ' ')
+          MOD_VERSION=$(grep -E '^mod_version' gradle.properties | cut -d'=' -f2 | tr -d ' ')
+          RELEASE_NAME="VTDownloader ${VT_VERSION}-${MOD_VERSION}"
+          TAG_NAME="${VT_VERSION}-${MOD_VERSION}"
+          echo "release_name=${RELEASE_NAME}" >> $GITHUB_OUTPUT
+          echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.release_info.outputs.tag_name }}
+          release_name: ${{ steps.release_info.outputs.release_name }}
+          body: "Automated release for ${{ steps.release_info.outputs.release_name }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
