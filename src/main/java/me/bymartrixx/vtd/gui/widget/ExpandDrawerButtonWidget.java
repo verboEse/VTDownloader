@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.render.RenderPipelines;
 import net.minecraft.util.Identifier;
+import me.bymartrixx.vtd.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Consumer;
@@ -74,7 +75,7 @@ public class ExpandDrawerButtonWidget implements Element, Drawable, Selectable {
                 && mouseY >= this.y && mouseY < this.y + TAB_HEIGHT;
         float u = hovered ? TAB_WIDTH : 0.0F;
         float v = this.extended ? TAB_HEIGHT : 0.0F;
-        graphics.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, this.getLeft(), this.y, u, v, TAB_WIDTH, TAB_HEIGHT, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        Util.drawTexture(graphics, TEXTURE, this.getLeft(), this.y, (int) u, (int) v, TAB_WIDTH, TAB_HEIGHT);
     }
 
     @Override

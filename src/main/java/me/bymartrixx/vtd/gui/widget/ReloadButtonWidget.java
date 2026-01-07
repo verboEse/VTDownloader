@@ -2,6 +2,7 @@ package me.bymartrixx.vtd.gui.widget;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.button.ButtonWidget;
 import net.minecraft.text.Text;
 
@@ -18,16 +19,19 @@ public class ReloadButtonWidget extends ButtonWidget {
         return ICON;
     }
 
-    @Override
     protected void drawScrollingText(GuiGraphics graphics, TextRenderer textRenderer, int xOffset, int color) {
-        // ClickableWidget#drawScrollableText
         int scale = 2;
-        int left = (this.getX() + xOffset) / scale;
-        int right = (this.getX() + this.getWidth() - xOffset) / scale;
-
         graphics.getMatrices().pushMatrix();
         graphics.getMatrices().scale(scale, scale);
-        drawScrollingText(graphics, textRenderer, this.getIconText(), left, this.getY() / scale, right, (this.getY() + this.getHeight()) / scale, color);
+        int cx = (this.getX() + xOffset + this.getWidth() / 2) / scale;
+        int cy = (this.getY() + (this.getHeight() - textRenderer.fontHeight) / 2) / scale;
+        graphics.drawCenteredShadowedText(textRenderer, this.getIconText(), cx, cy, color);
         graphics.getMatrices().popMatrix();
+    }
+
+    @Override
+    public void method_75752(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        // Bridge for mappings that use obfuscated method names for rendering
+        drawScrollingText(graphics, MinecraftClient.getInstance().textRenderer, 0, 0xFFFFFFFF);
     }
 }

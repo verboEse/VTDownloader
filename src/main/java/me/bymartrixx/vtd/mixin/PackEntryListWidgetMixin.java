@@ -1,10 +1,10 @@
 package me.bymartrixx.vtd.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import me.bymartrixx.vtd.access.PackEntryListWidgetAccess;
 import me.bymartrixx.vtd.access.PackScreenAccess;
 import me.bymartrixx.vtd.gui.VTDownloadScreen;
 import me.bymartrixx.vtd.util.Constants;
+import me.bymartrixx.vtd.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.pack.PackScreen;
@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
 import net.minecraft.client.gui.widget.list.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.gui.widget.list.EntryListWidget;
 import net.minecraft.client.gui.widget.list.pack.PackEntryListWidget;
-import net.minecraft.client.render.RenderPipelines;
 import net.minecraft.text.Text;
 import net.minecraft.text.component.TranslatableComponent;
 import org.spongepowered.asm.mixin.Final;
@@ -24,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.client.input.MouseButtonEvent;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(PackEntryListWidget.class)
 public abstract class PackEntryListWidgetMixin extends AlwaysSelectedEntryListWidget<PackEntryListWidget.C_rndhezet>
@@ -123,8 +121,7 @@ public abstract class PackEntryListWidgetMixin extends AlwaysSelectedEntryListWi
                     u = PENCIL_SIZE;
                 }
 
-                graphics.drawTexture(RenderPipelines.GUI_TEXTURED, Constants.PENCIL_TEXTURE, pencilX, pencilY,
-                        u, v, PENCIL_SIZE, PENCIL_SIZE, PENCIL_TEXTURE_SIZE, PENCIL_TEXTURE_SIZE);
+                Util.drawTexture(graphics, Constants.PENCIL_TEXTURE, pencilX, pencilY, (int) u, (int) v, PENCIL_SIZE, PENCIL_SIZE);
             }
         }
 
@@ -133,9 +130,10 @@ public abstract class PackEntryListWidgetMixin extends AlwaysSelectedEntryListWi
                 value = "INVOKE",
                 target = "Lnet/minecraft/client/gui/widget/list/pack/PackEntryListWidget$PackEntry;isSelectable()Z"
         ), method = "mouseClicked")
-        private void onMouseClicked(MouseButtonEvent event, boolean bl, CallbackInfoReturnable<Boolean> cir,
-                                    @Local(ordinal = 0) double clickedX, @Local(ordinal = 1) double clickedY) {
+        private void onMouseClicked(MouseButtonEvent event, boolean bl, CallbackInfoReturnable<Boolean> cir) {
             if (this.vtdownloader$editable) {
+                double clickedX = event.x();
+                double clickedY = event.y();
                 int pencilX = this.vtdownloader$getPencilXOffset();
                 int pencilY = this.vtdownloader$getPencilYOffset();
 

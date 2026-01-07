@@ -3,6 +3,7 @@ package me.bymartrixx.vtd.gui.widget;
 import me.bymartrixx.vtd.data.Category;
 import me.bymartrixx.vtd.gui.VTDownloadScreen;
 import me.bymartrixx.vtd.util.RenderUtil;
+import me.bymartrixx.vtd.util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.AbstractParentElement;
@@ -262,9 +263,7 @@ public class CategorySelectionWidget extends AbstractParentElement implements Dr
     // @see EntryListWidget#drawBackground
     private void renderListBackground(GuiGraphics graphics) {
         Identifier texture = MinecraftClient.getInstance().world == null ? BACKGROUND_TEXTURE : INWORLD_BACKGROUND_TEXTURE;
-        graphics.drawTexture(RenderPipelines.GUI_TEXTURED, texture,
-                this.left, this.top, this.right + (int) this.getScrollAmount(), this.bottom,
-                this.width, this.height, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
+        Util.drawTexture(graphics, texture, this.left, this.top, 0, 0, this.width, this.height);
     }
 
     private void renderCategories(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
@@ -287,8 +286,8 @@ public class CategorySelectionWidget extends AbstractParentElement implements Dr
 
         Identifier leftSeparator = MinecraftClient.getInstance().world == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
         Identifier rightSeparator = MinecraftClient.getInstance().world == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
-        graphics.drawTexture(RenderPipelines.GUI_TEXTURED, leftSeparator, this.top, -this.left, 0.0f, 0.0f, this.height, 2, 32, 2);
-        graphics.drawTexture(RenderPipelines.GUI_TEXTURED, rightSeparator, this.top, -this.right - 2, 0.0f, 0.0f, this.height, 2, 32, 2);
+        Util.drawTexture(graphics, leftSeparator, this.top, -this.left, 0, 0, this.height, 2);
+        Util.drawTexture(graphics, rightSeparator, this.top, -this.right - 2, 0, 0, this.height, 2);
 
         matrices.popMatrix();
     }

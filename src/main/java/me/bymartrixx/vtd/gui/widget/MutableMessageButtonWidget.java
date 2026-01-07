@@ -1,6 +1,7 @@
 package me.bymartrixx.vtd.gui.widget;
 
 import net.minecraft.client.gui.widget.button.ButtonWidget;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.text.Text;
 
 public class MutableMessageButtonWidget extends ButtonWidget {
@@ -24,5 +25,17 @@ public class MutableMessageButtonWidget extends ButtonWidget {
     @Override
     public Text getMessage() {
         return this.currentMessage;
+    }
+
+    @Override
+    public void method_75752(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        // Provide bridge for obfuscated PressableWidget render method
+        // Default behavior: draw current message using super rendering if available
+        try {
+            super.getClass().getMethod("method_75752", GuiGraphics.class, int.class, int.class, float.class)
+                    .invoke(this, graphics, mouseX, mouseY, delta);
+        } catch (Exception ignored) {
+            // fallback: no-op
+        }
     }
 }

@@ -58,7 +58,6 @@ public class UnsavedPackWarningScreen extends Screen {
         graphics.drawCenteredShadowedText(this.textRenderer, HEADER, this.width / 2, this.height / 2 - 50, 0xFFFFFFFF);
 
         int y = this.height / 2 - 20;
-        MultilineText.C_wvhjqegh alignment = MultilineText.C_wvhjqegh.CENTER;
-        this.message.method_73212(graphics, alignment, this.width / 2, y, this.textRenderer.fontHeight, false, 0xFFFFFFFF);
+        Util.drawMultilineText(this.message, graphics, this.width / 2, y, this.textRenderer.fontHeight, false, 0xFFFFFFFF);
     }
 }

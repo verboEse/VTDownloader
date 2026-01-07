@@ -368,8 +368,7 @@ public class PackSelectionListWidget extends EntryListWidget<PackSelectionListWi
         int lineHeight = getLineHeight(textRenderer);
 
         int textY = y - lineHeight * 2;
-        MultilineText.C_wvhjqegh alignment = MultilineText.C_wvhjqegh.CENTER;
-        this.errorText.method_73212(graphics, alignment, x, textY, lineHeight, false, 0xFFFFFFFF);
+        Util.drawMultilineText(this.errorText, graphics, x, textY, lineHeight, false, 0xFFFFFFFF);
     }
 
     public void renderDebugInfo(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -568,8 +567,7 @@ public class PackSelectionListWidget extends EntryListWidget<PackSelectionListWi
         private void renderDescription(GuiGraphics graphics, int x, int y, int width) {
             TextRenderer textRenderer = this.client.textRenderer;
             MultilineText description = this.getShortDescription(width - TEXT_MARGIN, textRenderer);
-            MultilineText.C_wvhjqegh alignment = MultilineText.C_wvhjqegh.CENTER;
-            description.method_73212(graphics, alignment, x, y, textRenderer.fontHeight, false, 0xFFFFFFFF);
+            Util.drawMultilineText(description, graphics, x, y, textRenderer.fontHeight, false, 0xFFFFFFFF);
         }
 
         private static Text truncateAtLastPunctuation(Text originalText, int maxWidth, TextRenderer textRenderer) {
@@ -612,7 +610,7 @@ public class PackSelectionListWidget extends EntryListWidget<PackSelectionListWi
             downloadIcon();
             if (!this.iconExists) return;
 
-            graphics.drawTexture(RenderPipelines.GUI_TEXTURED, this.icon, x, y, 0.0F, 0.0F, size, size, size, size);
+                Util.drawTexture(graphics, this.icon, x, y, 0, 0, size, size);
         }
         // endregion
 
@@ -684,10 +682,9 @@ public class PackSelectionListWidget extends EntryListWidget<PackSelectionListWi
 
         private void renderText(GuiGraphics graphics, int x, int y, int width, int height) {
             MultilineText text = this.getText(width);
-            MultilineText.C_wvhjqegh alignment = MultilineText.C_wvhjqegh.CENTER;
             int lineHeight = this.client.textRenderer.fontHeight;
             int textY = y + height / 2 - text.count() * lineHeight / 2;
-            text.method_73212(graphics, alignment, x, textY, lineHeight, false, 0xFFFFFFFF);
+            Util.drawMultilineText(text, graphics, x, textY, lineHeight, false, 0xFFFFFFFF);
         }
         // endregion
 
@@ -723,6 +720,8 @@ public class PackSelectionListWidget extends EntryListWidget<PackSelectionListWi
         protected static final int BUTTON_HEIGHT = 20;
         protected static final int BUTTON_HORIZONTAL_PADDING = 32;
         protected static final Identifier TEXTURE = Identifier.ofDefault("widget/button");
+        protected static final int TEXTURE_WIDTH = 32;
+        protected static final int TEXTURE_HEIGHT = 32;
 
         protected final Category category;
         protected final Text name;
@@ -760,8 +759,7 @@ public class PackSelectionListWidget extends EntryListWidget<PackSelectionListWi
             int width = this.getWidth();
             int height = this.getHeight();
 
-            graphics.drawSprite(RenderPipelines.GUI_TEXTURED, TEXTURE,
-                    x + BUTTON_HORIZONTAL_PADDING, y + (height - BUTTON_HEIGHT) / 2, width - BUTTON_HORIZONTAL_PADDING * 2, BUTTON_HEIGHT);
+                Util.drawTexture(graphics, TEXTURE, x + BUTTON_HORIZONTAL_PADDING, y + (height - BUTTON_HEIGHT) / 2, 0, 0, width - BUTTON_HORIZONTAL_PADDING * 2, BUTTON_HEIGHT);
             graphics.drawCenteredShadowedText(this.client.textRenderer, this.name, x + width / 2, y + (height - this.client.textRenderer.fontHeight) / 2, 0xFFFFFFFF);
         }
     }
