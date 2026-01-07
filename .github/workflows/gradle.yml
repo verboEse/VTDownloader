@@ -54,6 +54,12 @@ jobs:
           echo "release_name=${RELEASE_NAME}" >> $GITHUB_OUTPUT
           echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
 
+          # Find the actual JAR filenames
+          MOD_JAR=$(ls build/libs/vt-downloader-*.jar | grep -v sources)
+          SOURCES_JAR=$(ls build/libs/vt-downloader-*-sources.jar)
+          echo "mod_jar=${MOD_JAR}" >> $GITHUB_OUTPUT
+          echo "sources_jar=${SOURCES_JAR}" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         if: ${{ github.event_name == 'push' }}
         id: create_release
@@ -70,8 +76,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/vt-downloader-*.jar
-          asset_name: vt-downloader.jar
+          asset_path: ${{ steps.release_info.outputs.mod_jar }}
+          asset_name: vt-downloader-${{ steps.release_info.outputs.tag_name }}.jar
           asset_content_type: application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,8 +87,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/vt-downloader-*-sources.jar
-          asset_name: vt-downloader-sources.jar
+          asset_path: ${{ steps.release_info.outputs.sources_jar }}
+          asset_name: vt-downloader-${{ steps.release_info.outputs.tag_name }}-sources.jar
           asset_content_type: application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
