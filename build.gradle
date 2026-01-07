@@ -40,10 +40,15 @@ dependencies {
 
 	modImplementation libs.fabric.api
 
-	// With modImplementation it breaks on runtime
-	modCompileOnly(libs.recursive.resources) {
-		exclude group: "com.terraformersmc", module: "modmenu"
-	}
+	// recursive-resources is optional and its maven host is unavailable;
+	// keep it out of the compile classpath to avoid resolution failures.
+
+	// Apache HttpClient is used by VTDMod for HTTP operations; include at runtime
+	modImplementation libs.httpclient
+	include libs.httpclient
+	include libs.httpcore
+	include libs.commonscodec
+	include libs.commonslogging
 }
 
 processResources {

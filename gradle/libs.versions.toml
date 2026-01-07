@@ -1,12 +1,16 @@
 [versions]
-minecraft = "1.21.10"
-quilt_mappings = "1.21.10+build.4"
+minecraft = "1.21.11"
+quilt_mappings = "1.21.11+build.2"
 fabric_loader = "0.17.3"
 
-fabric_api = "0.136.0+1.21.10"
+fabric_api = "0.141.1+1.21.11"
 
 # Other mods
-recursive_resources = "2.7.2+1.21.7"
+recursive_resources = "2.7.2+1.21.10"
+httpclient = "4.5.13"
+httpcore = "4.4.16"
+commonscodec = "1.15"
+commonslogging = "1.2"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -16,6 +20,11 @@ fabric_loader =  { module = "net.fabricmc:fabric-loader", version.ref = "fabric_
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 
 recursive_resources = { module = "nl.enjarai:recursive-resources", version.ref = "recursive_resources" }
+
+httpclient = { module = "org.apache.httpcomponents:httpclient", version.ref = "httpclient" }
+httpcore = { module = "org.apache.httpcomponents:httpcore", version.ref = "httpcore" }
+commonscodec = { module = "commons-codec:commons-codec", version.ref = "commonscodec" }
+commonslogging = { module = "commons-logging:commons-logging", version.ref = "commonslogging" }
 
 [plugins]
 fabric_loom = { id = "fabric-loom", version = "1.13.6" }
