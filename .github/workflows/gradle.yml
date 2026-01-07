@@ -45,14 +45,17 @@ jobs:
 
       - name: Determine release info
         id: release_info
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: |
           VT_VERSION=$(grep -E '^vt_version' gradle.properties | cut -d'=' -f2 | tr -d ' ')
           MOD_VERSION=$(grep -E '^mod_version' gradle.properties | cut -d'=' -f2 | tr -d ' ')
+          MC_VERSION=$(grep -E '^minecraft = ' gradle/libs.versions.toml | cut -d'"' -f2)
           RELEASE_NAME="VTDownloader ${VT_VERSION}-${MOD_VERSION}"
-          TAG_NAME="${VT_VERSION}-${MOD_VERSION}"
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "release_name=${RELEASE_NAME}" >> $GITHUB_OUTPUT
           echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
+          echo "mc_version=${MC_VERSION}" >> $GITHUB_OUTPUT
+          echo "mod_version=${MOD_VERSION}" >> $GITHUB_OUTPUT
 
           # Find the actual JAR filenames
           MOD_JAR=$(ls build/libs/vt-downloader-*.jar | grep -v sources)
@@ -61,7 +64,7 @@ jobs:
           echo "sources_jar=${SOURCES_JAR}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         id: create_release
         uses: actions/create-release@v1
         with:
@@ -72,23 +75,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload JAR to Release
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.release_info.outputs.mod_jar }}
-          asset_name: vt-downloader-${{ steps.release_info.outputs.tag_name }}.jar
+          asset_name: vtdownloader-fabric-${{ steps.release_info.outputs.mc_version }}-${{ steps.release_info.outputs.mod_version }}.jar
           asset_content_type: application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Sources JAR to Release
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.release_info.outputs.sources_jar }}
-          asset_name: vt-downloader-${{ steps.release_info.outputs.tag_name }}-sources.jar
+          asset_name: vtdownloader-fabric-${{ steps.release_info.outputs.mc_version }}-${{ steps.release_info.outputs.mod_version }}-sources.jar
           asset_content_type: application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
