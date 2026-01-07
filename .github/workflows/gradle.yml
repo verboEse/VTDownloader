@@ -49,7 +49,7 @@ jobs:
         run: |
           VT_VERSION=$(grep -E '^vt_version' gradle.properties | cut -d'=' -f2 | tr -d ' ')
           MOD_VERSION=$(grep -E '^mod_version' gradle.properties | cut -d'=' -f2 | tr -d ' ')
-          MC_VERSION=$(grep -E '^minecraft = ' gradle/libs.versions.toml | cut -d'"' -f2)
+          MC_VERSION=$(grep -E '^minecraft = "[0-9]' gradle/libs.versions.toml | cut -d'"' -f2)
           RELEASE_NAME="VTDownloader ${VT_VERSION}-${MOD_VERSION}"
           TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "release_name=${RELEASE_NAME}" >> $GITHUB_OUTPUT
